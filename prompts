@@ -1,0 +1,143 @@
+去基线
+输入文件：inputdata.mat
+输出：一段尽可能简单的matlab代码，实现适用于所有样本的、所有通道的基线去除
+说明：inputdata.mat是一个拥有623个样本的数据集。每个样本是一个形状是(?,25)的二维数组。其中，25是代表通道数，也就是说，每个样本是拥有25个通道的多通道脉搏波。
+脉搏波中的基线是指脉搏信号在时间序列上的平均水平线。它反映了在没有心脏跳动的情况下，脉搏信号所表现出的静态水平。在理想情况下，脉搏波的基线应该是平稳且接近于零的，即在没有心搏的情况下，脉搏信号应该维持在一个相对恒定的水平。然而，在实际的脉搏信号采集过程中，由于各种外部因素的影响，基线往往会出现漂移，即基线水平发生上下波动，不再是理想的平稳状态。这种基线漂移会对脉搏信号的分析和解读造成干扰，影响后续的心血管健康评估和疾病诊断。
+现在需要去除所有样本中所有通道的基线漂移。请你根据这些信息和所给的数据，选择适当的去除基线的方法（如三次样条插值、最小二乘法、低通滤波和带通滤波等）。生成一段matlab代码，实现适用于所有样本的、所有通道的基线去除
+输出的例子(One-shot): 
+for j = 1:25
+        % 去基线
+        raw(:,j) = filter_D(raw(:,j),0.7,50,1);
+end
+function ch1_fine = filter_D( data,fmaxd,fs,order )
+% 去基线
+% fmaxd 截止频率
+% fs 采样率
+ch1 = data(:,1)';
+fmaxn=fmaxd/(fs/2);
+[b,a]=butter(order,fmaxn,'low');
+dd=filtfilt(b,a,ch1);%通过Hz低通滤波器的信号
+ch1_fine=ch1-dd;          %去除这一段信号，得到去基线漂移的信号
+end
+
+Input File: inputdata.mat
+Objective: To generate a streamlined piece of MATLAB code for the removal of baseline drift across all channels for every sample in the data set.
+Description: The inputdata.mat file comprises a dataset with 623 samples. Each sample corresponds to a two-dimensional (?, 25) array, where 25 signifies the number of channels, implying that each sample consists of a multi-channel pulse wave with 25 channels.
+In the context of pulse waves, the baseline refers to the average horizontal reference line for the pulse signal over a time series, reflecting the static level of the pulse signal in the absence of any cardiac activity. Ideally, the pulse wave baseline should be steady and close to zero, meaning that the pulse signal should maintain a relatively constant level in the absence of any heartbeat. However, during the practical process of pulse signal acquisition, the baseline often tends to drift due to a variety of external factors, thus ceasing to be in an ideal, steady state and instead fluctuating above or below the reference line. This baseline drift can interfere with the analysis and interpretation of the pulse signal, subsequently disrupting the assessment of cardiovascular health and disease diagnoses.
+The goal now is to eliminate the baseline drift across all channels for every sample. Based on this information and the provided data, choose an appropriate method for baseline removal such as cubic spline interpolation, least squares fitting, low-pass filtering, or band-pass filtering. Construct a piece of MATLAB code to remove the baseline drift across all channels for every sample.
+Example Output (One-shot):
+for j = 1:25
+        %Remove baseline
+        raw(:,j) = filter_D(raw(:,j),0.7,50,1);
+end
+function ch1_fine = filter_D( data,fmaxd,fs,order )
+% Remove baseline
+% fmaxd Cutoff frequency
+% fs Sampling rate
+ch1 = data(:,1)';
+fmaxn=fmaxd/(fs/2);
+[b,a]=butter(order,fmaxn,'low');
+dd=filtfilt(b,a,ch1);%Pulse signal through a Hz low-pass filter
+ch1_fine=ch1-dd; %Remove this part of the signal to obtain signal without baseline drift
+end
+去噪
+输入文件：inputdata.mat
+输出：一段尽可能简单的matlab代码，实现适用于所有样本的、所有通道的去噪
+说明：inputdata.mat是一个拥有623个样本的数据集。每个样本是一个形状是(?,25)的二维数组。其中，25是代表通道数，也就是说，每个样本是拥有25个通道的多通道脉搏波。
+在实际的脉搏信号采集过程中，由于各种外部因素的影响，可能会出现噪声，这种噪声漂移会对脉搏信号的分析和解读造成干扰，影响后续的心血管健康评估和疾病诊断。
+请你根据这些信息并观察我提供的数据，选择适当的去除噪声的方法（如三次样条插值、最小二乘法、低通滤波和带通滤波等）。生成一段matlab代码，实现适用于所有样本的、所有通道的去噪
+输出的例子(One-shot): 
+for j = 1:25
+        % 巴特沃斯去噪
+        fmaxd = 20;
+        fs_noise = 85; % 噪声的采样率暂定为85
+        fmaxn = fmaxd/(fs_noise/2);
+        [b,a] = butter(1,fmaxn,'low');
+        raw(:,j) = filtfilt(b,a,raw(:,j));
+end
+
+
+Input File: inputdata.mat
+Objective: To generate a concise segment of MATLAB code that is capable of noise removal for all channels across all samples in the dataset.
+Description: The file inputdata.mat contains a dataset of 623 samples, each represented by a two-dimensional (n x 25) array, where 25 refers to the number of channels. This suggests that each sample is a multi-channel pulse wave with 25 channels.
+During the actual process of pulse signal acquisition, noise may be introduced due to a variety of external factors. This noise can cause interference in the analysis and interpretation of the pulse signal, affecting subsequent cardiovascular health assessments and disease diagnoses.
+Assignment: Taking into account the given information and the provided data, please select an appropriate method for noise removal, such as cubic spline interpolation, least squares method, low pass filtering, or band-pass filtering. Subsequently, generate a piece of MATLAB code that is capable of noise removal for all channels across all samples.
+Sample Output (One-shot):
+for j = 1:25
+% Noise removal via Butterworth filtering
+fmaxd = 20;
+fs_noise = 85; % Presumptive sampling rate for noise is 85
+fmaxn = fmaxd/(fs_noise/2);
+[b,a] = butter(1,fmaxn,'low');
+raw(:,j) = filtfilt(b,a,raw(:,j));
+end
+获得最大通道
+输入文件：inputdata.mat
+输出：一段尽可能简单的matlab代码，实现适用于所有样本的、能获取样本中脉搏波的最大通道的获取
+说明：inputdata.mat是一个拥有623个样本的数据集。每个样本是一个形状是(?,25)的二维数组。其中，25是代表通道数，也就是说，每个样本是拥有25个通道的多通道脉搏波。现在需要获取所有样本的最大通道。请你根据这些信息，生成一段matlab代码，实现适用于所有样本的、能获取样本中脉搏波的最大通道的获取
+输出的例子(One-shot): 
+% 先寻找最大通道
+    find_best_channel_arr = [];
+    for j = 1:25
+        % 抬升
+        raw(:,j) = raw(:,j) - min(raw(:,j));
+        find_best_channel_arr(j) = mean(raw(:,j));
+    end
+    m = max(find_best_channel_arr);
+    [~, channel_raw] = find(find_best_channel_arr==m);
+    
+num_best_channels(i) = channel_raw; % 记录最大通道
+
+Input File: inputdata.mat
+Objective: To generate a succinct MATLAB code that is capable of identifying the channel on which the maximum pulse wave is recorded for all samples in the dataset.
+Description: The file inputdata.mat comprises a dataset of 623 samples, each represented by a two-dimensional (?, 25) matrix, where 25 refers to the number of channels. Meaning, each sample corresponds to a multi-channel pulse wave comprising 25 channels. The task is to identify the channel with the highest pulse wave for all samples.
+Example Output (One-shot):
+% First, find the channel with the maximum value
+    find_best_channel_arr = [];
+    for j = 1:25
+        % Level Shift
+        raw(:,j) = raw(:,j) - min(raw(:,j));
+        find_best_channel_arr(j) = mean(raw(:,j));
+    end
+    m = max(find_best_channel_arr);
+    [~, channel_raw] = find(find_best_channel_arr==m);
+    
+    num_best_channels(i) = channel_raw; % Record the channel with the maximum value
+周期切割（最大通道）
+输入文件：inputdata_onlybest.mat
+输出：所有623个样本的周期切割点
+说明：inputdata_onlybest.mat是一个拥有623个样本的数据集。每个样本是一个形状是(?,1)的一维数组。也就是说，每个样本是单通道脉搏波。而对于每个样本，都存在多个周期。周期切割点是分割这些周期的时间点。请你根据这些信息，通过观察数据，直接给出所有623个样本的周期切割点（一个样本一组周期切割点，为一维数组）。 
+输出的例子(One-shot): 
+Sample1：75,154,226…
+Sample2：81,158,234…
+…
+Sample623:66,155,222…
+
+Input File: inputdata_filtered_forbest.mat
+Output: A table that enumerates the cycle partition points of all 623 samples.
+Description: inputdata_filtered_forbest.mat harbors a dataset constituting 623 samples. Each sample manifests as a two-dimensional (?,25) matrix, where 25 serves as an indicator of the number of channels, thereby implying that each given sample represents a multi-channel pulse wave integrated with 25 separate channels. For every individual sample and channel, several cycles exist. The cycle division points denote the timestamps partitioning these cycles. For a single sample, we stipulate that all the channels share a unique set of cycle partition points. 
+Based on the provided information, please scrutinize the data and promptly print the cycle partition points for all 623 samples in a table format. For each sample, a group of cycle partition points is put forth in a one-dimensional array.
+Example Output (One-shot):
+Sample1: 75,154,226...
+Sample2: 81,158,234...
+…
+Sample623: 66,155,222...
+周期切割（一次性全扔进去）
+输入文件：inputdata_filtered_forbest.mat
+输出：用一个表格print出所有623个样本的周期切割点
+说明：inputdata_filtered_forbest.mat是一个拥有623个样本的数据集。每个样本是一个形状是(?,25)的二维数组。其中，25是代表通道数，也就是说，每个样本是拥有25个通道的多通道脉搏波。而对于每个样本、每个通道，都存在多个周期。周期切割点是分割这些周期的时间点。我们规定对于一个样本，所有通道共用一套周期分割点。请你根据这些信息，通过观察数据，直接用一个表格print所有623个样本的周期切割点（一个样本一组周期切割点，为一维数组）。 
+输出的例子(One-shot): 
+Sample1：75,154,226…
+Sample2：81,158,234…
+…
+Sample623:66,155,222…
+
+Input File: inputdata_filtered_forbest.mat
+Output: A table delineating the cycle break points of all 623 samples.
+Description: inputdata_filtered_forbest.mat encompasses a dataset comprising 623 samples. Each sample is represented as a two-dimensional (?, 25) matrix, where 25 serves as an indicator of the number of channels. Hence, each sample includes a multichannel pulse wave consisting of 25 separate channels. Each sample and channel consist of several cycles. The cycle break points will be the timestamps dividing these cycles. For a single sample, it is stipulated that a unified set of cycle break points would be shared among all channels.
+Given the aforementioned details, upon analyzing the data, generate a table to provide printouts of the cycle break points for all 623 samples (a one-dimensional array representing a group of cycle break points for each sample).
+Example Output (One-shot):
+Sample1: 75,154,226…
+Sample2: 81,158,234…
+…
+Sample623: 66,155,222…
