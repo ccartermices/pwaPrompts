@@ -25,9 +25,13 @@ Obtain an API key from OpenAI for accessing ChatGPT-4 and ChatGLM services. Stor
 ```
 ## Troubleshooting
 API Key Issues: Ensure that your API key is correct and has not expired.
+
 Network Problems: Check your internet connection if you encounter any network errors.
+
 Dependency Errors: Make sure all required Python packages are installed.
+
 For further assistance, refer to the API documentation or raise an issue in this repository.
+
 
 ## Bibliography
 ```
